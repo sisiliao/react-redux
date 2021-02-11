@@ -14,7 +14,6 @@ export default class Movie extends Component {
     this.setState({
       ...this.state,
       movies: this.state.movies.filter((m) => m._id !== id),
-      likes: this.state.likes.filter((m) => m._id !== id),
     })
   }
 
