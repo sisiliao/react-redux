@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { getMovies } from '../services/fakeMovieService'
-import Like from './Like'
-import Pagination from './Pagination'
+import Like from './common/Like'
+import Pagination from './common/Pagination'
 import { paginate } from '../util/paginate'
-import ListGroup from './ListGroup'
+import ListGroup from './common/ListGroup'
 import { getGenres } from '../services/fakeGenreService'
 
 export default class Movie extends Component {
@@ -18,7 +18,7 @@ export default class Movie extends Component {
   }
 
   componentDidMount = () => {
-    const genres = [{ name: 'All Genres' }, ...getGenres()]
+    const genres = [{ name: 'All Genres', _id: '' }, ...getGenres()]
     this.setState({ genres, movies: getMovies() })
   }
 
