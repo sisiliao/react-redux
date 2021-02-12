@@ -7,9 +7,9 @@ const Like = (props) => {
   return (
     <div onClick={props.onLike}>
       {props.liked ? (
-        <i className='fas fa-heart'></i>
+        <i style={{ cursor: 'Pointer' }} className='fas fa-heart'></i>
       ) : (
-        <i className='far fa-heart'></i>
+        <i style={{ cursor: 'Pointer' }} className='far fa-heart'></i>
       )}
     </div>
   )
