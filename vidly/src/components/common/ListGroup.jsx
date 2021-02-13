@@ -8,7 +8,6 @@ const ListGroup = (props) => {
     textProperty,
     valueProperty,
   } = props
-  console.log(items)
   return (
     <div>
       <ul className='list-group'>

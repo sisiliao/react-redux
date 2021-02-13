@@ -3,13 +3,13 @@ import React from 'react'
 //Input: liked: boolean
 //Output: onClick
 
-const Like = (props) => {
+const Like = ({ liked, onClick }) => {
   return (
-    <div onClick={props.onLike}>
-      {props.liked ? (
-        <i style={{ cursor: 'Pointer' }} className='fas fa-heart'></i>
+    <div onClick={onClick}>
+      {liked ? (
+        <i className='fas fa-heart clickable'></i>
       ) : (
-        <i style={{ cursor: 'Pointer' }} className='far fa-heart'></i>
+        <i className='far fa-heart clickable'></i>
       )}
     </div>
   )
