@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Like from './common/Like'
-
 import Table from './common/Table'
 
 class MovieTable extends Component {
@@ -8,7 +8,10 @@ class MovieTable extends Component {
     const { movies, onSort, sortColumn } = this.props
 
     const columns = [
-      { path: 'title', label: 'Title' },
+      {
+        key: 'title',
+        content: (m) => <Link to={`/movies/${m._id}`}>{m.title}</Link>,
+      },
       { path: 'genre.name', label: 'Genre' },
       { path: 'numberInStock', label: 'Stock' },
       { path: 'dailyRentalRate', label: 'Rate' },

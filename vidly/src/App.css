@@ -40,3 +40,7 @@
 .clickable {
   cursor: Pointer;
 }
+
+.navbar {
+  margin-bottom: 30px;
+}
