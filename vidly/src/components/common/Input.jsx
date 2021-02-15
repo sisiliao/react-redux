@@ -1,13 +1,12 @@
 import React from 'react'
 
 const Input = ({ name, label, error, ...rest }) => {
-  console.log(rest)
   return (
-    <div className='mb-3'>
+    <div className='form-group'>
       <label htmlFor={name} className='form-label'>
         {label}
       </label>
-      <input {...rest} name={name} className='form-control'></input>
+      <input {...rest} name={name} id={name} className='form-control'></input>
       {error && <p className='error'>{error}</p>}
     </div>
   )

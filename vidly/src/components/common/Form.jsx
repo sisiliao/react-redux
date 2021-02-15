@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Joi from 'joi'
 import Input from './Input'
+import Select from './Select'
 
 export default class Form extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ export default class Form extends Component {
 
     this.setState({ errors: errors || {} })
     if (errors) {
+      console.log(errors)
       return
     }
 
@@ -76,6 +78,21 @@ export default class Form extends Component {
         error={errors[name]}
         onChange={this.changeHandler}
       ></Input>
+    )
+  }
+
+  renderSelect = (name, label, options) => {
+    const { data, errors } = this.state
+
+    return (
+      <Select
+        name={name}
+        value={data[name]}
+        label={label}
+        options={options}
+        onChange={this.changeHandler}
+        error={errors[name]}
+      />
     )
   }
 }

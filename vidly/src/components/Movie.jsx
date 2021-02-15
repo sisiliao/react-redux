@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getMovies } from '../services/fakeMovieService'
+import { getMovies, saveMovie } from '../services/fakeMovieService'
 import { getGenres } from '../services/fakeGenreService'
 import { paginate } from '../util/paginate'
 import Pagination from './common/Pagination'
@@ -83,6 +83,9 @@ export default class Movie extends Component {
     return { data: movies, totalCount: filteredMovie.length }
   }
 
+  addNewMovieHandler = () => {
+    this.props.history.push(`/movies/new`)
+  }
   render() {
     const {
       movies: allMovies,
@@ -111,6 +114,9 @@ export default class Movie extends Component {
         </div>
         <div className='col'>
           <p>Showing {totalCount} movies</p>
+          <button className='btn btn-primary' onClick={this.addNewMovieHandler}>
+            Add New Movie
+          </button>
           <MovieTable
             movies={movies}
             onLike={this.likeHandler}
