@@ -44,3 +44,7 @@
 .navbar {
   margin-bottom: 30px;
 }
+
+.error {
+  color: red;
+}

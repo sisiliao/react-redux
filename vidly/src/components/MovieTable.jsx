@@ -9,7 +9,8 @@ class MovieTable extends Component {
 
     const columns = [
       {
-        key: 'title',
+        path: 'title',
+        label: 'Title',
         content: (m) => <Link to={`/movies/${m._id}`}>{m.title}</Link>,
       },
       { path: 'genre.name', label: 'Genre' },

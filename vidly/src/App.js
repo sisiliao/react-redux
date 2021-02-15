@@ -8,6 +8,7 @@ import Customer from './components/Customer'
 import Rental from './components/Rental'
 import NotFound from './components/common/NotFound'
 import MovieDetails from './components/MovieDetails'
+import LoginForm from './components/LoginForm'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path='/customers' component={Customer} />
           <Route path='/rentals' component={Rental} />
           <Route path='/notfound' component={NotFound} />
+          <Route path='/login' component={LoginForm} />
           <Redirect path='/' exact to='/movies' />
           <Redirect to='/notfound' />
         </Switch>
