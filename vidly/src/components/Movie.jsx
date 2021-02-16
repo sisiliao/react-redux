@@ -5,7 +5,9 @@ import { paginate } from '../util/paginate'
 import Pagination from './common/Pagination'
 import ListGroup from './common/ListGroup'
 import MovieTable from './MovieTable'
+import Input from './common/Input'
 import _ from 'lodash'
+import SearchBar from './common/SearchBar'
 
 export default class Movie extends Component {
   constructor() {
@@ -16,6 +18,8 @@ export default class Movie extends Component {
       movies: [],
       genres: [],
       sortColumn: { path: 'title', order: 'asc' },
+      selectedGenre: null,
+      searchQuery: '',
     }
   }
 
@@ -51,13 +55,6 @@ export default class Movie extends Component {
     })
   }
 
-  changeGenreHandler = (genre) => {
-    this.setState({
-      selectedGenre: genre,
-      currentPage: 0,
-    })
-  }
-
   getPagedData = () => {
     const {
       movies: allMovies,
@@ -65,12 +62,18 @@ export default class Movie extends Component {
       currentPage,
       selectedGenre,
       sortColumn,
+      searchQuery,
     } = this.state
 
-    const filteredMovie =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-        : allMovies
+    let filteredMovie = allMovies
+
+    if (searchQuery) {
+      filteredMovie = filteredMovie.filter((m) =>
+        m.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    } else if (selectedGenre && selectedGenre._id) {
+      filteredMovie = allMovies.filter((m) => m.genre._id === selectedGenre._id)
+    }
 
     const sorted = _.orderBy(
       filteredMovie,
@@ -86,6 +89,23 @@ export default class Movie extends Component {
   addNewMovieHandler = () => {
     this.props.history.push(`/movies/new`)
   }
+
+  changeGenreHandler = (genre) => {
+    this.setState({
+      selectedGenre: genre,
+      currentPage: 0,
+      searchQuery: '',
+    })
+  }
+
+  searchChangeHandler = (query) => {
+    this.setState({
+      searchQuery: query,
+      selectedGenre: null,
+      currentPage: 0,
+    })
+  }
+
   render() {
     const {
       movies: allMovies,
@@ -94,6 +114,7 @@ export default class Movie extends Component {
       genres,
       selectedGenre,
       sortColumn,
+      searchQuery,
     } = this.state
     const { length } = allMovies
 
@@ -117,6 +138,12 @@ export default class Movie extends Component {
           <button className='btn btn-primary' onClick={this.addNewMovieHandler}>
             Add New Movie
           </button>
+
+          <SearchBar
+            value={searchQuery}
+            onChange={this.searchChangeHandler}
+          ></SearchBar>
+
           <MovieTable
             movies={movies}
             onLike={this.likeHandler}
