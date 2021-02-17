@@ -1,8 +1,8 @@
 import React from 'react'
 import Form from './common/Form'
-import { getMovieById, saveMovie } from '../services/fakeMovieService'
+import { getMovieById, saveMovie } from '../services/movieService'
 import Joi from 'joi'
-import { getGenres } from '../services/fakeGenreService'
+import { getGenres } from '../services/genreService'
 
 class MovieForm extends Form {
   state = {
@@ -34,18 +34,30 @@ class MovieForm extends Form {
 
   schema = Joi.object(this.validationKeys)
 
-  componentDidMount = () => {
-    let data = { ...this.state.data }
+  populateGenre = async () => {
+    const { data: genres } = await getGenres()
+    this.setState({ genres })
+  }
 
-    if (this.props.match.params.id !== 'new') {
-      const movie = getMovieById(this.props.match.params.id)
-      if (!movie) return this.props.history.replace('/not-found')
-
-      data = this.mapToViewModel(movie)
+  populateMovies = async () => {
+    const movieId = this.props.match.params.id
+    if (movieId === 'new') {
+      return
     }
 
-    const genres = getGenres()
-    this.setState({ data, genres })
+    try {
+      const { data: movie } = await getMovieById(this.props.match.params.id)
+      this.setState({ data: this.mapToViewModel(movie) })
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        this.props.history.replace('/not-found')
+      }
+    }
+  }
+
+  componentDidMount = async () => {
+    await this.populateGenre()
+    await this.populateMovies()
   }
 
   mapToViewModel(movie) {
@@ -58,8 +70,8 @@ class MovieForm extends Form {
     }
   }
 
-  doSubmit = () => {
-    saveMovie(this.state.data)
+  doSubmit = async () => {
+    await saveMovie(this.state.data)
 
     this.props.history.push('/movies')
   }
@@ -76,12 +88,6 @@ class MovieForm extends Form {
 
           {this.renderButton('Save')}
         </form>
-        {/* <button
-          className='btn btn-primary'
-          onClick={() => history.push('/movies')}
-        >
-          Save
-        </button> */}
       </div>
     )
   }

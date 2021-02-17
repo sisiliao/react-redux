@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import { getMovies, saveMovie } from '../services/fakeMovieService'
-import { getGenres } from '../services/fakeGenreService'
+import { getMovies, deleteMovie } from '../services/movieService'
+import { getGenres } from '../services/genreService'
 import { paginate } from '../util/paginate'
 import Pagination from './common/Pagination'
 import ListGroup from './common/ListGroup'
 import MovieTable from './MovieTable'
-import Input from './common/Input'
 import _ from 'lodash'
 import SearchBar from './common/SearchBar'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default class Movie extends Component {
   constructor() {
@@ -23,16 +24,30 @@ export default class Movie extends Component {
     }
   }
 
-  componentDidMount = () => {
-    const genres = [{ name: 'All Genres', _id: '' }, ...getGenres()]
-    this.setState({ genres, movies: getMovies() })
+  componentDidMount = async () => {
+    let { data: genres } = await getGenres()
+    genres = [{ name: 'All Genres', _id: '' }, ...genres]
+    const { data: movies } = await getMovies()
+    this.setState({ genres, movies })
   }
 
-  deleteHandler = (id) => {
+  deleteHandler = async (movie) => {
+    const originalMovies = this.state.movies
+    const movies = originalMovies.filter((m) => m._id !== movie._id)
     this.setState({
-      ...this.state,
-      movies: this.state.movies.filter((m) => m._id !== id),
+      movies,
     })
+
+    try {
+      await deleteMovie(movie._id)
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        toast.error('Movie has been deleted.')
+      }
+      this.setState({
+        movies: originalMovies,
+      })
+    }
   }
 
   sortHandler = (sortColumn) => {
@@ -127,6 +142,7 @@ export default class Movie extends Component {
     return (
       <div className='row'>
         <div className='col-3'>
+          <ToastContainer />
           <ListGroup
             items={genres}
             selectedItem={selectedGenre}
