@@ -28,6 +28,7 @@ class TableHeader extends Component {
 
   render() {
     const { columns, onSort } = this.props
+
     return (
       <thead>
         <tr>
