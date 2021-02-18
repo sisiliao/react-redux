@@ -16,7 +16,7 @@ class TableHeader extends Component {
   }
 
   renderIcon = (column) => {
-    if (column.content || column.path !== this.props.sortColumn.path) {
+    if (!column.path || column.path !== this.props.sortColumn.path) {
       return null
     }
     if (this.props.sortColumn.order === 'asc') {

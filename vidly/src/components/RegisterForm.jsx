@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Form from './common/Form'
 import Joi from 'joi'
+import userService from '../services/userService'
+import authService from '../services/authService'
 
 class RegisterForm extends Form {
   constructor(props) {
@@ -19,8 +21,19 @@ class RegisterForm extends Form {
       .required(),
   }
 
-  doSubmit = () => {
-    console.log('Submitted......')
+  doSubmit = async () => {
+    try {
+      const response = await userService.register(this.state.data)
+      authService.loginWithJWT(response.headers['x-auth-token'])
+      console.log('Successfully registered')
+      window.location = '/'
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        //print error
+        console.log(ex.response.data)
+        return
+      }
+    }
   }
 
   schema = Joi.object(this.validationKeys)

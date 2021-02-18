@@ -11,6 +11,7 @@
 import React from 'react'
 import Form from './common/Form'
 import Joi from 'joi'
+import authService from '../services/authService'
 
 class LoginForm extends Form {
   constructor(props) {
@@ -28,8 +29,19 @@ class LoginForm extends Form {
 
   schema = Joi.object(this.validationKeys)
 
-  doSubmit = () => {
-    console.log('Submitted......')
+  doSubmit = async () => {
+    try {
+      await authService.login(this.state.data)
+      //completely refresh the home page
+      const { state } = this.props.location
+      window.location = state ? state.from.pathname : '/'
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data)
+        return
+      }
+    }
+    console.log('Login succeded......')
   }
 
   render() {

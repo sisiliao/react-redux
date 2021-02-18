@@ -43,6 +43,8 @@ export default class Movie extends Component {
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
         toast.error('Movie has been deleted.')
+      } else if (ex.response && ex.response.status === 400) {
+        toast.error(ex.response.data)
       }
       this.setState({
         movies: originalMovies,
